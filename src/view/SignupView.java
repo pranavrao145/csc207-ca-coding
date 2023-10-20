@@ -39,6 +39,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.signupViewModel = signupViewModel;
         this.clearViewModel = clearViewModel;
         signupViewModel.addPropertyChangeListener(this);
+        clearViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -82,15 +83,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(clear)) {
                             SignupView.this.clearController.execute();
-                            ClearState currentState = SignupView.this.clearViewModel.getState();
-
-                            String usersToDisplay = "";
-
-                            for (String user : currentState.getDeletedUsers()) {
-                                usersToDisplay += user + "\n";
-                            }
-
-                            JOptionPane.showMessageDialog(SignupView.this, usersToDisplay);
                         }
 
                     }
@@ -182,9 +174,21 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        SignupState state = (SignupState) evt.getNewValue();
-        if (state.getUsernameError() != null) {
-            JOptionPane.showMessageDialog(this, state.getUsernameError());
+        if (evt.getPropertyName().equals("signupState")) {
+            SignupState state = (SignupState) evt.getNewValue();
+            if (state.getUsernameError() != null) {
+                JOptionPane.showMessageDialog(this, state.getUsernameError());
+            }
+        } else {
+            ClearState state = (ClearState) evt.getNewValue();
+
+            String usersToDisplay = "";
+
+            for (String user : state.getDeletedUsers()) {
+                usersToDisplay += user + "\n";
+            }
+
+            JOptionPane.showMessageDialog(SignupView.this, usersToDisplay);
         }
     }
 }

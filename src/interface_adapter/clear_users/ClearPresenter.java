@@ -16,5 +16,7 @@ public class ClearPresenter implements ClearOutputBoundary {
         ClearState clearState = clearViewModel.getState();
         clearState.setDeletedUsers(response.getUsersDeleted());
         this.clearViewModel.setState(clearState);
+
+        clearViewModel.firePropertyChanged();
     }
 }
