@@ -1,6 +1,8 @@
 package view;
 
 import interface_adapter.clear_users.ClearController;
+import interface_adapter.clear_users.ClearState;
+import interface_adapter.clear_users.ClearViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
@@ -18,6 +20,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     public final String viewName = "sign up";
 
     private final SignupViewModel signupViewModel;
+    private final ClearViewModel clearViewModel;
     private final JTextField usernameInputField = new JTextField(15);
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
@@ -29,11 +32,12 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
     private final JButton clear;
 
-    public SignupView(SignupController signupController, ClearController clearController, SignupViewModel signupViewModel) {
+    public SignupView(SignupController signupController, ClearController clearController, SignupViewModel signupViewModel, ClearViewModel clearViewModel) {
 
         this.signupController = signupController;
         this.clearController = clearController;
         this.signupViewModel = signupViewModel;
+        this.clearViewModel = clearViewModel;
         signupViewModel.addPropertyChangeListener(this);
 
         JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
@@ -78,6 +82,15 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(clear)) {
                             SignupView.this.clearController.execute();
+                            ClearState currentState = SignupView.this.clearViewModel.getState();
+
+                            String usersToDisplay = "";
+
+                            for (String user : currentState.getDeletedUsers()) {
+                                usersToDisplay += user + "\n";
+                            }
+
+                            JOptionPane.showMessageDialog(SignupView.this, usersToDisplay);
                         }
 
                     }
