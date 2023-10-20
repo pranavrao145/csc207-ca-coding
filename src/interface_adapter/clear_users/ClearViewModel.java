@@ -8,6 +8,9 @@ import interface_adapter.ViewModel;
 public class ClearViewModel extends ViewModel {
     private ClearState state = new ClearState();
 
+    public static final String TITLE_LABEL = "Last Cleared Users";
+    public static final String OK_LABEL = "OK";
+
     public ClearViewModel() {
         super("clear");
     }

@@ -59,7 +59,7 @@ public class SignupUseCaseFactory {
     private static ClearController createUserClearUseCase(ViewManagerModel viewManagerModel, ClearViewModel clearViewModel, ClearUserDataAccessInterface userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        ClearOutputBoundary clearOutputBoundary = new ClearPresenter(clearViewModel);
+        ClearOutputBoundary clearOutputBoundary = new ClearPresenter(clearViewModel, viewManagerModel);
 
         ClearInputBoundary userClearInteractor = new ClearInteractor(
                 userDataAccessObject, clearOutputBoundary);

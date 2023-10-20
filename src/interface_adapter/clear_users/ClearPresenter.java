@@ -8,8 +8,9 @@ public class ClearPresenter implements ClearOutputBoundary {
     private final ClearViewModel clearViewModel;
     private ViewManagerModel viewManagerModel;
 
-    public ClearPresenter(ClearViewModel clearViewModel) {
+    public ClearPresenter(ClearViewModel clearViewModel, ViewManagerModel viewManagerModel) {
         this.clearViewModel = clearViewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     @Override
