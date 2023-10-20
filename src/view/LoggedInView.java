@@ -2,7 +2,6 @@ package view;
 
 import interface_adapter.logged_in.LoggedInState;
 import interface_adapter.logged_in.LoggedInViewModel;
-import interface_adapter.login.LoginState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +33,7 @@ public class LoggedInView extends JPanel implements ActionListener, PropertyChan
         username = new JLabel();
 
         JPanel buttons = new JPanel();
-        logOut = new JButton(loggedInViewModel.LOGOUT_BUTTON_LABEL);
+        logOut = new JButton(LoggedInViewModel.LOGOUT_BUTTON_LABEL);
         buttons.add(logOut);
 
         logOut.addActionListener(this);

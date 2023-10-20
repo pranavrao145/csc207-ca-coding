@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.clear_users.ClearController;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
@@ -21,16 +22,17 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
     private final JPasswordField passwordInputField = new JPasswordField(15);
     private final JPasswordField repeatPasswordInputField = new JPasswordField(15);
     private final SignupController signupController;
+    private final ClearController clearController;
 
     private final JButton signUp;
     private final JButton cancel;
 
-    // TODO Note: this is the new JButton for clearing the users file
     private final JButton clear;
 
-    public SignupView(SignupController controller, SignupViewModel signupViewModel) {
+    public SignupView(SignupController signupController, ClearController clearController, SignupViewModel signupViewModel) {
 
-        this.signupController = controller;
+        this.signupController = signupController;
+        this.clearController = clearController;
         this.signupViewModel = signupViewModel;
         signupViewModel.addPropertyChangeListener(this);
 
@@ -50,39 +52,37 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         cancel = new JButton(SignupViewModel.CANCEL_BUTTON_LABEL);
         buttons.add(cancel);
 
-        // TODO Note: the following line instantiates the "clear" button; it uses
-        //      a CLEAR_BUTTON_LABEL constant which is defined in the SignupViewModel class.
-        //      You need to add this "clear" button to the "buttons" panel.
         clear = new JButton(SignupViewModel.CLEAR_BUTTON_LABEL);
+        buttons.add(clear);
 
         signUp.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     public void actionPerformed(ActionEvent evt) {
                         if (evt.getSource().equals(signUp)) {
-                            SignupState currentState = signupViewModel.getState();
+                            SignupState currentState = SignupView.this.signupViewModel.getState();
 
-                            signupController.execute(
+                            SignupView.this.signupController.execute(
                                     currentState.getUsername(),
                                     currentState.getPassword(),
                                     currentState.getRepeatPassword()
-                            );
+                                    );
                         }
                     }
                 }
-        );
+                );
 
-        // TODO Add the body to the actionPerformed method of the action listener below
-        //      for the "clear" button. You'll need to write the controller before
-        //      you can complete this.
         clear.addActionListener(
                 new ActionListener() {
                     @Override
-                    public void actionPerformed(ActionEvent e) {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(clear)) {
+                            SignupView.this.clearController.execute();
+                        }
 
                     }
                 }
-        );
+                );
 
         cancel.addActionListener(this);
 
@@ -114,7 +114,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                     @Override
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
-                        currentState.setPassword(passwordInputField.getText() + e.getKeyChar());
+                        currentState.setPassword(new String(passwordInputField.getPassword()) + e.getKeyChar());
                         signupViewModel.setState(currentState);
                     }
 
@@ -128,14 +128,14 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
                     }
                 }
-        );
+                );
 
         repeatPasswordInputField.addKeyListener(
                 new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
                         SignupState currentState = signupViewModel.getState();
-                        currentState.setRepeatPassword(repeatPasswordInputField.getText() + e.getKeyChar());
+                        currentState.setRepeatPassword(new String(repeatPasswordInputField.getPassword()) + e.getKeyChar());
                         signupViewModel.setState(currentState); // Hmm, is this necessary?
                     }
 
@@ -149,7 +149,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
                     }
                 }
-        );
+                );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
